@@ -1,0 +1,126 @@
+<section class="home">
+  <h1 class="home--title m-0">Selamat Datang</h1>
+  <p class="home--desc m-0">
+    Millions of movies, TV shows and people to discover. Explore now.
+  </p>
+
+  <div class="home__search">
+    <div class="input-group">
+      <span class="input-search-icon"><i class="fa fa-search"></i></span>
+      <input class="input-search" type="text" name="search" id="search" />
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="container__movies">
+    <div class="movies">
+      <h2 class="movies__title">
+        <i class="fa fa-film"></i>
+        Movies
+      </h2>
+      <div style="display: flex;gap: 28px;">
+        <p class="movies__tab">
+          <i class="fa fa-film"></i>
+          Now Playing
+        </p>
+
+        <p class="movies__tab">
+          <i class="fa fa-film"></i>
+          Upcoming
+        </p>
+        <p class="movies__tab">
+          <i class="fa fa-film"></i>
+          Populer
+        </p>
+      </div>
+    </div>
+
+    <div class="list-movie">
+      <div *ngFor="let movie of moviesList | slice : 0 : 15">
+        <ng-container
+          [ngTemplateOutlet]="templateMovieRef"
+          [ngTemplateOutletContext]="{
+            data: movie
+          }"
+        >
+        </ng-container>
+      </div>
+      <!-- <imalzy-movie-card *ngFor="let movie of moviesList | slice:0:15" [data]="movie"></imalzy-movie-card> -->
+    </div>
+  </section>
+  <section class="container__tv"></section>
+</div>
+
+<div class="container">
+    <section class="container__movies">
+      <div class="movies">
+        <h2 class="movies__title">
+          <i class="fa fa-film"></i>
+          TV Show
+        </h2>
+        <div style="display: flex;gap: 28px;">
+          <p class="movies__tab">
+            <i class="fa fa-film"></i>
+            Now Playing
+          </p>
+  
+          <p class="movies__tab">
+            <i class="fa fa-film"></i>
+            Upcoming
+          </p>
+          <p class="movies__tab">
+            <i class="fa fa-film"></i>
+            Populer
+          </p>
+        </div>
+      </div>
+  
+      <div class="list-movie">
+        <div *ngFor="let movie of tvList | slice : 0 : 15">
+          <ng-container
+            [ngTemplateOutlet]="templateMovieRef"
+            [ngTemplateOutletContext]="{
+              data: movie
+            }"
+          >
+          </ng-container>
+        </div>
+        <!-- <imalzy-movie-card *ngFor="let movie of moviesList | slice:0:15" [data]="movie"></imalzy-movie-card> -->
+      </div>
+    </section>
+    <section class="container__tv"></section>
+  </div>
+
+<!-- <ng-template #buttonConnectTemplate let-variant="variant" let-data="data"></ng-template> -->
+<ng-template #templateMovieRef let-item="data">
+  <div class="card">
+    <img
+      loading="lazy"
+      [ngSrc]="
+        'https://image.tmdb.org/t/p/w220_and_h330_face' + item?.poster_path
+      "
+      srcset="
+        https://image.tmdb.org/t/p/w220_and_h330_face{{item?.poster_path}} 1x,
+        https://image.tmdb.org/t/p/w440_and_h660_face{{item?.poster_path}} 2x
+      "
+      [alt]="item?.title ?? item?.name"
+      ImgMissing
+      [height]="159"
+      [width]="239"
+    />
+    <div class="card__content">
+        <!-- [routerLink]="isMovie ? '/movies/' + model.id : '/tv-shows/' + model.id" -->
+        <a
+          *ngIf="item.title ?? item.name"
+          [title]="item.title ?? item.name"
+          class="poster__title colored-hover"
+        >
+          {{ item.title ?? item.name  | truncate:30}}
+        </a>
+        <p *ngIf="item['release_date'] ?? item['first_air_date']">
+          {{ item["release_date"] ?? item["first_air_date"] | date }}
+        </p>
+      </div>
+  </div>
+</ng-template>

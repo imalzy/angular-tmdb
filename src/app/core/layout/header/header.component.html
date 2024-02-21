@@ -1,0 +1,31 @@
+<div class="nav-wrap">
+  <nav>
+    <div class="logo">Imalzy</div>
+
+    <div
+      #menu
+      class="links"
+      [ngStyle]="{ 'max-height': showMenu ? menu.scrollHeight + 'px' : '' }"
+    >
+      <div class="links__left">
+        <a href="">Movies</a>
+        <a href="">TV Shows</a>
+        <!-- <a href="">People</a>
+        <a href="">More</a> -->
+      </div>
+
+      <div class="links__right">
+        <select name="lang" id="lang" class="lang">
+          <option value="EN">English</option>
+          <option value="ID">Indonesia</option>
+        </select>
+
+        <a href="">Login</a>
+        <a href="">Join Us</a>
+      </div>
+
+    </div>
+
+    <button class="icon btn--icon" (click)="onClick()">&#9776;</button>
+  </nav>
+</div>
