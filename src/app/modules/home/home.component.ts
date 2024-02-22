@@ -8,12 +8,9 @@ import {
   SlicePipe,
 } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { take } from 'rxjs';
-import {
-  MovieService,
-  Result,
-} from 'src/app/apis/movie.service';
+import { MovieService, Result } from 'src/app/apis/movie.service';
 import { TvService } from 'src/app/apis/tv.service';
 import { ImgMissingDirective } from 'src/app/shared/directives/img-missing.directive';
 import { MovieCardComponent } from 'src/app/shared/movie-card/movie-card.component';
@@ -34,14 +31,19 @@ import { TruncatePipe } from 'src/app/shared/pipes/truncate.pipe';
     NgOptimizedImage,
     NgTemplateOutlet,
     ImgMissingDirective,
-    TruncatePipe
+    TruncatePipe,
+    RouterModule
   ],
   standalone: true,
 })
 export class HomeComponent implements OnInit {
   moviesList: Result[] = [];
-  tvList:any;
-  constructor(private moviesService: MovieService, private tvService: TvService) {
+  tvList: Result[] = [];
+  constructor(
+    private moviesService: MovieService,
+    private tvService: TvService,
+    private router: Router
+  ) {
     console.log('constructor');
   }
 
@@ -61,9 +63,17 @@ export class HomeComponent implements OnInit {
   }
 
   getTVShows(type: string, page: number): void {
-    this.tvService.getTVShows(type, page).subscribe(res => {
+    this.tvService.getTVShows(type, page).subscribe((res) => {
       this.tvList = res.results;
-      console.log(this.tvList)
+      console.log(this.tvList);
     });
+  }
+
+  detailFilm(id: string, contentType: string) {
+    if (contentType === 'movies') {
+      this.router.navigate(['movies', id]);
+    } else {
+      this.router.navigate(['tv-shows', id]);
+    }
   }
 }

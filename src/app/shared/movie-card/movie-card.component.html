@@ -1,3 +1,43 @@
-<div class="movie-card">
-    
+<div class="movie" *ngIf="data.id">
+  <div
+    class="movie-img"
+    [ngStyle]="{
+      'background-image': 'url(' + imgUrl + data?.poster_path + ')'
+    }"
+    role="presentation"
+    (click)="detailFilm(data?.id)"
+  ></div>
+  <div class="text-movie-cont">
+    <div class="mr-grid">
+      <div class="col1">
+        <h1>{{ data.title ?? data?.name | truncate : 30 }}</h1>
+      </div>
+    </div>
+    <div class="mr-grid" style="min-height: 114px">
+      <div class="col1">
+        <p class="movie-description">
+          {{ data?.overview | truncate : 100 }}
+        </p>
+      </div>
+    </div>
+    <div class="mr-grid action-row">
+      <div
+        class="col6 action-btn"
+        [attr.role]="'none'"
+        (click)="addToFavorite(data)"
+      >
+        <i
+          [ngClass]="data.favorited ? 'fa fa-heart' : 'fa fa-heart-o'"
+          aria-hidden="true"
+        ></i>
+      </div>
+      <div class="col6 action-btn">
+        <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+      </div>
+      <div class="col6 action-btn">
+        <i class="fa fa-share-alt" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
 </div>
+<div class="empty" *ngIf="data.id === '' || data.id === null || data.id === undefined">Data kosong</div>

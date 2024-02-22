@@ -1,0 +1,15 @@
+<main class="contents container" style="padding: 0;">
+    <div class="contents__container">
+   <div class="contents__right-side">
+      <div
+        class="contents__list"
+      >
+        <imalzy-movie-card
+          *ngFor="let content of storeService.favorite$ | async"
+          [data]="content"
+        ></imalzy-movie-card>
+      </div>
+
+    </div>
+  </div>
+</main>
