@@ -19,7 +19,7 @@
         <i class="fa fa-film"></i>
         Movies
       </h2>
-      <div style="display: flex;gap: 28px;">
+      <div style="display: flex; gap: 28px">
         <p class="movies__tab">
           <i class="fa fa-film"></i>
           Now Playing
@@ -41,7 +41,8 @@
         <ng-container
           [ngTemplateOutlet]="templateMovieRef"
           [ngTemplateOutletContext]="{
-            data: movie
+            data: movie,
+            content: 'movies'
           }"
         >
         </ng-container>
@@ -53,48 +54,49 @@
 </div>
 
 <div class="container">
-    <section class="container__movies">
-      <div class="movies">
-        <h2 class="movies__title">
+  <section class="container__movies">
+    <div class="movies">
+      <h2 class="movies__title">
+        <i class="fa fa-film"></i>
+        TV Show
+      </h2>
+      <div style="display: flex; gap: 28px">
+        <p class="movies__tab">
           <i class="fa fa-film"></i>
-          TV Show
-        </h2>
-        <div style="display: flex;gap: 28px;">
-          <p class="movies__tab">
-            <i class="fa fa-film"></i>
-            Now Playing
-          </p>
-  
-          <p class="movies__tab">
-            <i class="fa fa-film"></i>
-            Upcoming
-          </p>
-          <p class="movies__tab">
-            <i class="fa fa-film"></i>
-            Populer
-          </p>
-        </div>
+          Now Playing
+        </p>
+
+        <p class="movies__tab">
+          <i class="fa fa-film"></i>
+          Upcoming
+        </p>
+        <p class="movies__tab">
+          <i class="fa fa-film"></i>
+          Populer
+        </p>
       </div>
-  
-      <div class="list-movie">
-        <div *ngFor="let movie of tvList | slice : 0 : 15">
-          <ng-container
-            [ngTemplateOutlet]="templateMovieRef"
-            [ngTemplateOutletContext]="{
-              data: movie
-            }"
-          >
-          </ng-container>
-        </div>
-        <!-- <imalzy-movie-card *ngFor="let movie of moviesList | slice:0:15" [data]="movie"></imalzy-movie-card> -->
+    </div>
+
+    <div class="list-movie">
+      <div *ngFor="let movie of tvList | slice : 0 : 15">
+        <ng-container
+          [ngTemplateOutlet]="templateMovieRef"
+          [ngTemplateOutletContext]="{
+            data: movie,
+            content: 'tv-shows'
+          }"
+        >
+        </ng-container>
       </div>
-    </section>
-    <section class="container__tv"></section>
-  </div>
+      <!-- <imalzy-movie-card *ngFor="let movie of moviesList | slice:0:15" [data]="movie"></imalzy-movie-card> -->
+    </div>
+  </section>
+  <section class="container__tv"></section>
+</div>
 
 <!-- <ng-template #buttonConnectTemplate let-variant="variant" let-data="data"></ng-template> -->
-<ng-template #templateMovieRef let-item="data">
-  <div class="card">
+<ng-template #templateMovieRef let-item="data" let-content="content">
+  <div class="card" role="presentation" (click)="detailFilm(item.id, content)">
     <img
       loading="lazy"
       [ngSrc]="
@@ -110,17 +112,17 @@
       [width]="239"
     />
     <div class="card__content">
-        <!-- [routerLink]="isMovie ? '/movies/' + model.id : '/tv-shows/' + model.id" -->
-        <a
-          *ngIf="item.title ?? item.name"
-          [title]="item.title ?? item.name"
-          class="poster__title colored-hover"
-        >
-          {{ item.title ?? item.name  | truncate:30}}
-        </a>
-        <p *ngIf="item['release_date'] ?? item['first_air_date']">
-          {{ item["release_date"] ?? item["first_air_date"] | date }}
-        </p>
-      </div>
+      <!-- [routerLink]="isMovie ? '/movies/' + model.id : '/tv-shows/' + model.id" -->
+      <a
+        *ngIf="item.title ?? item.name"
+        [title]="item.title ?? item.name"
+        class="poster__title colored-hover"
+      >
+        {{ item.title ?? item.name | truncate : 30 }}
+      </a>
+      <p *ngIf="item['release_date'] ?? item['first_air_date']">
+        {{ item["release_date"] ?? item["first_air_date"] | date }}
+      </p>
+    </div>
   </div>
 </ng-template>

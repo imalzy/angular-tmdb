@@ -1,6 +1,6 @@
 <div class="nav-wrap">
   <nav>
-    <div class="logo">Imalzy</div>
+    <div class="logo" routerLink="/">Imalzy</div>
 
     <div
       #menu
@@ -8,8 +8,8 @@
       [ngStyle]="{ 'max-height': showMenu ? menu.scrollHeight + 'px' : '' }"
     >
       <div class="links__left">
-        <a href="">Movies</a>
-        <a href="">TV Shows</a>
+        <a routerLink="/movies">Movies</a>
+        <a routerLink="/tv-shows">TV Shows</a>
         <!-- <a href="">People</a>
         <a href="">More</a> -->
       </div>
@@ -20,10 +20,9 @@
           <option value="ID">Indonesia</option>
         </select>
 
-        <a href="">Login</a>
+        <a routerLink="/favorited">favorite</a>
         <a href="">Join Us</a>
       </div>
-
     </div>
 
     <button class="icon btn--icon" (click)="onClick()">&#9776;</button>
