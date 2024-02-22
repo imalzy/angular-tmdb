@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, find } from 'rxjs';
 import { Result } from './movie.service';
 
 @Injectable({
@@ -15,8 +15,14 @@ export class StoreService {
 
   addToFavorite(favorite: Result) {
     const data = this.getFavorite();
-
-    this.favorite.next([...data, favorite]);
+    const findData = data.findIndex(({ id }) => id === favorite.id);
+    console.log('find', findData);
+    if (findData === -1) {
+      this.favorite.next([...data, favorite]);
+    } else {
+      data.splice(findData, 1);
+      this.favorite.next([...data]);
+    }
   }
 
   removeFromFavorite(id: number) {

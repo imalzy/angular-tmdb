@@ -90,16 +90,11 @@ export class MoviePageComponent implements OnInit {
       favorited: true,
     };
 
-    const tempFilm = this.nowPlaying.map(p =>
-      p.id === item.id
-        ? { ...p, favorited: true }
-        : p
+    const tempFilm = this.nowPlaying.map((p) =>
+      p.id === item.id ? { ...p, favorited: !p.favorited } : p
     );
-    console.log(tempFilm)
-
-  
 
     this.nowPlaying = tempFilm;
-    this.storeService.addToFavorite(movie);
+    this.storeService.addToFavorite(item);
   }
 }
