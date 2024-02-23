@@ -7,7 +7,8 @@ import {
   NgTemplateOutlet,
   SlicePipe,
 } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { take } from 'rxjs';
 import { MovieService, Result } from 'src/app/apis/movie.service';
@@ -32,13 +33,14 @@ import { TruncatePipe } from 'src/app/shared/pipes/truncate.pipe';
     NgTemplateOutlet,
     ImgMissingDirective,
     TruncatePipe,
-    RouterModule
+    RouterModule,
   ],
   standalone: true,
 })
 export class HomeComponent implements OnInit {
   moviesList: Result[] = [];
   tvList: Result[] = [];
+  private readonly destroyRef = inject(DestroyRef);
   constructor(
     private moviesService: MovieService,
     private tvService: TvService,
@@ -55,7 +57,7 @@ export class HomeComponent implements OnInit {
   getMovies(type: string, page: number): void {
     this.moviesService
       .getMovies(type, page)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         this.moviesList = res.results as Result[];
         console.log('********movie list', this.moviesList);
@@ -63,10 +65,13 @@ export class HomeComponent implements OnInit {
   }
 
   getTVShows(type: string, page: number): void {
-    this.tvService.getTVShows(type, page).subscribe((res) => {
-      this.tvList = res.results;
-      console.log(this.tvList);
-    });
+    this.tvService
+      .getTVShows(type, page)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.tvList = res.results;
+        console.log(this.tvList);
+      });
   }
 
   detailFilm(id: string, contentType: string) {

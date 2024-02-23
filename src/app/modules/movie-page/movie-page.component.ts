@@ -1,5 +1,5 @@
 import { NgForOf, TitleCasePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { take } from 'rxjs';
@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { Router, RouterModule } from '@angular/router';
 import { TvService } from 'src/app/apis/tv.service';
 import { StoreService } from 'src/app/apis/store.service';
-import { coerceStringArray } from '@angular/cdk/coercion';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'imalzy-movie-page',
@@ -31,7 +31,8 @@ export class MoviePageComponent implements OnInit {
   totalResults: any;
   nowPlaying: any[] = [];
   contentType = '';
-
+  private readonly destroyRef = inject(DestroyRef);
+  
   constructor(
     private movieService: MovieService,
     private tvService: TvService,
@@ -52,7 +53,7 @@ export class MoviePageComponent implements OnInit {
   getNowPlayinMovies(page: number) {
     this.movieService
       .getNowPlaying(page)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         (res) => {
           this.totalResults = res.total_results;
@@ -68,7 +69,7 @@ export class MoviePageComponent implements OnInit {
   getNowPlayinTVShows(page: number) {
     this.tvService
       .getTvOnTheAir(page)
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         (res) => {
           this.totalResults = res.total_results;

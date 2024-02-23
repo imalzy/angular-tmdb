@@ -1,4 +1,11 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  inject,
+} from '@angular/core';
 import { CommonModule, DatePipe, NgForOf, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,6 +19,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MovieService } from 'src/app/apis/movie.service';
 import { TvService } from 'src/app/apis/tv.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface IMovieModel {
   adult: boolean;
@@ -144,7 +152,7 @@ export interface IContent {
   templateUrl: './detail-film.component.html',
   styleUrls: ['./detail-film.component.scss'],
 })
-export class DetailFilmComponent {
+export class DetailFilmComponent implements OnInit {
   contentType = '';
   content!: any;
   recomendedContentList: IPaginationModel[] = [];
@@ -152,6 +160,7 @@ export class DetailFilmComponent {
   isLoading = true;
 
   @ViewChild('matTrailerDialog') matTrailerDialog!: TemplateRef<any>;
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     private moviesService: MovieService,
@@ -195,7 +204,7 @@ export class DetailFilmComponent {
         })
       ),
     ])
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         ([movie, video, recomended]) => {
           this.content = movie;
@@ -244,7 +253,7 @@ export class DetailFilmComponent {
         })
       ),
     ])
-      .pipe(take(1))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         ([tvShow, resVideo, recomended]) => {
           this.content = tvShow;
